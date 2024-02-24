@@ -268,7 +268,7 @@ void Dialog::readPacmanLogFile(const QString &logFile)
 
         names.append(pkg);
 
-#define PARSE_TIME 0 // QDateTime operations are very slow and are not useful in the current implementation
+#define PARSE_TIME 1 // QDateTime operations are very slow and are not useful in the current implementation
 #if PARSE_TIME
         const int T_ix = timestamp.indexOf("T");
         if (T_ix != -1){
@@ -283,9 +283,7 @@ void Dialog::readPacmanLogFile(const QString &logFile)
             // minute:
             timestamp.append(":00");
         }
-
-        const QDateTime datetime = QDateTime::fromString(timestamp, "yyyy-MM-dd hh:mm:ss");
-        query.bindValue( ":date", datetime.toString("yyyy-MM-dd") );
+        query.bindValue( ":date", timestamp );
 #else
         timestamp.truncate(10); // leave only yyyy-MM-dd in timestamp
         query.bindValue( ":date", timestamp );

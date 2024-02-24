@@ -38,5 +38,5 @@ void DateColumnDelegate::paint(QPainter *painter, const QStyleOptionViewItem &op
 
     QLocale::setDefault(QLocale::system());
 
-    painter->drawText(textRect, Qt::AlignVCenter, QLocale::system().toString(index.data().toDate(), QLocale::LongFormat));
+    painter->drawText(textRect, Qt::AlignVCenter, QLocale::system().toString(index.data().toDateTime(), QLocale::LongFormat));
 }
