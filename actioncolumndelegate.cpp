@@ -31,17 +31,30 @@ void ActionColumnDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
                    iconSize.height());
 
     QString icon;
+    QString text;
 
-    if(action == "installed")
+    if(action == "installed") {
         icon = "list-add";
-    else if(action == "upgraded")
+        text = "+";
+    } else if(action == "upgraded") {
         icon = "go-up";
-    else if(action == "removed")
+        text = "↑";
+    } else if(action == "removed") {
         icon = "list-remove";
-    else if(action == "downgraded")
+        text = "-";
+    } else if(action == "downgraded") {
         icon = "go-down";
-    else if(action == "reinstalled")
+        text = "↓";
+    } else if(action == "reinstalled") {
         icon = "view-refresh";
+        text = "∓";
+    }
+
+    QIcon qicon = QIcon::fromTheme(icon);
+    if (qicon.isNull()) {
+        // Adwaita icon theme fix
+        qicon = QIcon::fromTheme(icon + "-symbolic");
+    }
 
     if (option.state & QStyle::State_Selected) {
         painter->fillRect(option.rect, option.palette.highlight());
@@ -50,5 +63,10 @@ void ActionColumnDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         painter->setPen(option.palette.text().color());
     }
 
-    painter->drawPixmap(iconRect, QIcon::fromTheme(icon).pixmap(iconSize));
+	if (qicon.isNull()) {
+		// draw text if no icon found
+		painter->drawText(iconRect, Qt::AlignCenter, text);
+	} else {
+        painter->drawPixmap(iconRect, qicon.pixmap(iconSize));
+    }
 }
